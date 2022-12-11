@@ -12,6 +12,7 @@
         <!--suppress PluginXmlValidity (internal API) -->
         <applicationInitializedListener implementation="net.earthcomputer.classfileindexer.AgentInitializedListener"/>
 
+        <applicationService serviceImplementation="net.earthcomputer.classfileindexer.config.CFIState"/>
         <fileBasedIndex implementation="net.earthcomputer.classfileindexer.ClassFileIndexExtension"/>
         <referencesSearch implementation="net.earthcomputer.classfileindexer.ReferencesSearchExtension"/>
         <methodReferencesSearch implementation="net.earthcomputer.classfileindexer.MethodReferencesSearchExtension"/>
