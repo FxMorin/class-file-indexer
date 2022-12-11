@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 ### Added
+- Support for 2022.3
+- Update java to 17
+### Changed
+- Update dependencies
+
+## [1.1.3]
+### Added
+- Support for 2022.2
+### Changed
+- Update dependencies
+
+## [1.1.2]
+### Added
 - Support for 2022.1
 ### Changed
 - Update dependencies

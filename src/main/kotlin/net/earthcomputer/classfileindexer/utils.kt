@@ -29,6 +29,7 @@ import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.SlowOperations
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.Type
+import org.jetbrains.annotations.NotNull
 
 private val internalNamesCache = MapMaker().weakKeys().makeMap<PsiClass, CachedValue<String?>>() // concurrent, uses identity for keys
 private fun PsiClass.computeInternalName(): String? {
@@ -41,7 +42,7 @@ private fun PsiClass.computeInternalName(): String? {
     var anonymousClassId = 1
     var found = false
     containingClass.accept(object : JavaElementVisitor() {
-        override fun visitAnonymousClass(aClass: PsiAnonymousClass?) {
+        override fun visitAnonymousClass(@NotNull aClass: PsiAnonymousClass) {
             if (!found) {
                 if (aClass === this@computeInternalName) {
                     found = true
