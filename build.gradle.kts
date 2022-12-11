@@ -178,7 +178,7 @@ tasks.register<proguard.gradle.ProGuardTask>("proguard") {
 //            "$javaHome/jmods/java.base.jmod"
 //        )
 
-    print("javaHome=$javaHome")
+    println("javaHome=$javaHome")
     // Add all JDK deps
     if (!properties("skipProguard").toBoolean()) {
         File("$javaHome/jmods/")
@@ -241,6 +241,14 @@ tasks.register<proguard.gradle.ProGuardTask>("proguard") {
     )
     keep(
         """ class net.earthcomputer.classfileindexer.IIsWriteOverride{*;}
+        """.trimIndent()
+    )
+    keep(
+        """ class net.earthcomputer.classfileindexer.config.CFIState{*;}
+        """.trimIndent()
+    )
+    keep(
+        """ class * extends javax.swing.plaf.ComponentUI {public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent);}
         """.trimIndent()
     )
 }

@@ -12,6 +12,13 @@
         <!--suppress PluginXmlValidity (internal API) -->
         <applicationInitializedListener implementation="net.earthcomputer.classfileindexer.AgentInitializedListener"/>
 
+        <applicationConfigurable
+                parentId="tools"
+                instance="net.earthcomputer.classfileindexer.config.CFISettings"
+                id="net.earthcomputer.classfileindexer.config.CFISettings"
+                displayName="Class File Indexer"/>
+        <applicationService serviceImplementation="net.earthcomputer.classfileindexer.config.CFIState"/>
+
         <fileBasedIndex implementation="net.earthcomputer.classfileindexer.ClassFileIndexExtension"/>
         <referencesSearch implementation="net.earthcomputer.classfileindexer.ReferencesSearchExtension"/>
         <methodReferencesSearch implementation="net.earthcomputer.classfileindexer.MethodReferencesSearchExtension"/>

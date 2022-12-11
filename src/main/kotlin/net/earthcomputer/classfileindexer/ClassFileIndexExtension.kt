@@ -2,14 +2,12 @@ package net.earthcomputer.classfileindexer
 
 import com.intellij.ide.highlighter.JavaClassFileType
 import com.intellij.openapi.progress.ProgressManager
-import com.intellij.util.indexing.DataIndexer
-import com.intellij.util.indexing.DefaultFileTypeSpecificInputFilter
-import com.intellij.util.indexing.FileBasedIndexExtension
-import com.intellij.util.indexing.FileContent
-import com.intellij.util.indexing.ID
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.util.indexing.*
 import com.intellij.util.io.DataExternalizer
 import com.intellij.util.io.DataInputOutputUtil
 import com.intellij.util.io.KeyDescriptor
+import net.earthcomputer.classfileindexer.config.CFIState
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.ClassReader
 import java.io.DataInput
 import java.io.DataOutput
@@ -71,7 +69,11 @@ class ClassFileIndexExtension :
 
     override fun getVersion() = 4
 
-    override fun getInputFilter() = DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE)
+    override fun getInputFilter() = object : DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE) {
+        override fun acceptInput(file: VirtualFile): Boolean {
+            return CFIState.getInstance().canIncludeClazz(file.nameWithoutExtension)
+        }
+    }
 
     override fun dependsOnFileContent() = true
 

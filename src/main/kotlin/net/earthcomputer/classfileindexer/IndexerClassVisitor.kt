@@ -2,6 +2,7 @@ package net.earthcomputer.classfileindexer
 
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressManager
+import net.earthcomputer.classfileindexer.config.CFIState
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.AnnotationVisitor
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.ClassVisitor
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.ConstantDynamic
