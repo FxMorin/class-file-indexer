@@ -2,7 +2,6 @@ package net.earthcomputer.classfileindexer
 
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressManager
-import net.earthcomputer.classfileindexer.config.CFIState
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.AnnotationVisitor
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.ClassVisitor
 import net.earthcomputer.classfileindexer.libs.org.objectweb.asm.ConstantDynamic
@@ -230,26 +229,9 @@ class IndexerClassVisitor : ClassVisitor(Opcodes.ASM9) {
     ) {
         locationStack.push("")
         className = name
-        val state = CFIState.instance.state
-        val shouldInclude = if (state.useBlacklist)
-            state.blacklistPaths.isNotEmpty() else state.whitelistPaths.isNotEmpty()
-        if (shouldInclude || state.canIncludeClazz(className)) {
-            signature?.let {
-                if (shouldInclude || state.canIncludeClazz(it)) {
-                    addClassSignature(it)
-                }
-            }
-            superName?.let {
-                if (shouldInclude || state.canIncludeClazz(it)) {
-                    addClassRef(it)
-                }
-            }
-            interfaces?.forEach {
-                if (shouldInclude || state.canIncludeClazz(it)) {
-                    addClassRef(it)
-                }
-            }
-        }
+        signature?.let { addClassSignature(it) }
+        superName?.let { addClassRef(it) }
+        interfaces?.forEach { addClassRef(it) }
     }
 
     override fun visitAnnotation(descriptor: String, visible: Boolean): AnnotationVisitor {
