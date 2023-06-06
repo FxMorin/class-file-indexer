@@ -2,7 +2,13 @@
 
 # class-file-indexer Changelog
 
-## [Unreleased]
+## [1.1.5]
+### Added
+- Support for 2023.1
+### Changed
+- Update dependencies
+
+## [1.1.4]
 ### Added
 - Support for 2022.3
 - Update java to 17
