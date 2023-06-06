@@ -1,14 +1,14 @@
 package net.earthcomputer.classfileindexer.config
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.Storage
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 
 @State(
-        name = "net.earthcomputer.classfileindexer.config.CFIState",
-        storages = [Storage("class-file-indexer.xml")]
+    name = "net.earthcomputer.classfileindexer.config.CFIState",
+    storages = [Storage("class-file-indexer.xml")]
 )
 class CFIState : PersistentStateComponent<CFIState.DataState> {
 
