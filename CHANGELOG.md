@@ -2,6 +2,10 @@
 
 # class-file-indexer Changelog
 
+## [1.1.6]
+### Added
+- Support for 2023.2
+
 ## [1.1.5]
 ### Added
 - Support for 2023.1
