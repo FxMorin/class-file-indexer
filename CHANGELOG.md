@@ -2,6 +2,11 @@
 
 # class-file-indexer Changelog
 
+## [1.2.0]
+### Added
+- New Config System! 
+- Ability to filter what packages are used
+
 ## [1.1.6]
 ### Added
 - Support for 2023.2
