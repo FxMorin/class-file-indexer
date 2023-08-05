@@ -62,7 +62,6 @@ class CFIState : PersistentStateComponent<CFIState> {
         needsCaching = false
         cachedPathRegex = mutableListOf()
         for (path in state.paths) {
-            println(path)
             cachedPathRegex.add(Regex(path))
         }
     }
