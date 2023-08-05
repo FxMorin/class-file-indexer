@@ -71,7 +71,16 @@ class ClassFileIndexExtension :
 
     override fun getInputFilter() = object : DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE) {
         override fun acceptInput(file: VirtualFile): Boolean {
-            return CFIState.getInstance().canIncludeClazz(file.nameWithoutExtension)
+            if (!CFIState.getInstance().enabled) {
+                return false
+            }
+            val index = file.path.lastIndexOf("!") // Find within Jar
+            if (index == -1) {
+                return CFIState.getInstance().useBlacklist
+            }
+
+            val classPath = file.path.substring(index + 2).removeSuffix("." + file.extension)
+            return CFIState.getInstance().canIncludeClazz(classPath)
         }
     }
 

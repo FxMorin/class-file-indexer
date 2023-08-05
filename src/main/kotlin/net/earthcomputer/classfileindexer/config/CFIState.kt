@@ -19,7 +19,7 @@ class CFIState : PersistentStateComponent<CFIState> {
     @JvmField
     var useRegex: Boolean = true
     @JvmField
-    var paths: MutableList<String> = mutableListOf("net\\.minecraft\\..*", "com\\.mojang\\..*")
+    var paths: MutableList<String> = mutableListOf("^net/minecraft/.*", "^com/mojang/.*")
 
     @Transient
     private var cachedPathRegex: MutableList<Regex> = mutableListOf()
