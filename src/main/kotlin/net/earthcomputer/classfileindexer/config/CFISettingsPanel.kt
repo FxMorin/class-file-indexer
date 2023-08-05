@@ -45,10 +45,6 @@ class CFISettingsPanel {
         gridBagLayout.setConstraints(buttonList, buttonConstraints)
         pathsPanel.layout = gridBagLayout
 
-        pathsList.addPropertyChangeListener {
-            arePathsModified = true
-        }
-
         pathsList.cellRenderer = TextFieldListRenderer()
         buttonList.cellRenderer = ButtonListRenderer()
 
@@ -56,12 +52,14 @@ class CFISettingsPanel {
             override fun mouseClicked(event: MouseEvent) {
                 val index: Int = buttonList.locationToIndex(event.getPoint())
                 CFIState.getInstance().paths.removeAt(index)
+                arePathsModified = true
                 refreshList()
             }
         })
 
         addPathButton.addActionListener {
             CFIState.getInstance().paths.add(pathTextField.text)
+            arePathsModified = true
             pathTextField.text = ""
             refreshList()
         }
@@ -75,6 +73,8 @@ class CFISettingsPanel {
 
         for (path in CFIState.getInstance().paths) {
             val textField = JTextField(path, 50)
+            textField.isEditable = false
+            textField.isFocusable = false
             textField.horizontalAlignment = JTextField.LEFT
             pathModel.addElement(textField)
             buttonModel.addElement(JButton("Remove"))
