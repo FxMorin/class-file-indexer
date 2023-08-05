@@ -2,6 +2,10 @@
 
 # class-file-indexer Changelog
 
+## [1.2.1]
+### Changed
+- Fixed bugs
+
 ## [1.2.0]
 ### Added
 - New Config System! 
