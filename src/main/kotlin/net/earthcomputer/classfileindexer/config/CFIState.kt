@@ -1,7 +1,9 @@
 package net.earthcomputer.classfileindexer.config
 
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.*
+import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 
 @State(
@@ -21,40 +23,48 @@ class CFIState : PersistentStateComponent<CFIState> {
 
     @Transient
     private var cachedPathRegex: MutableList<Regex> = mutableListOf()
+    @Transient
+    private var needsCaching: Boolean = useRegex
 
     override fun getState(): CFIState = this
 
     override fun loadState(state: CFIState) {
         XmlSerializerUtil.copyBean(state, this)
         if (state.useRegex) { // regex caching
-            cachedPathRegex = mutableListOf()
-            for (path in state.paths) {
-                cachedPathRegex.add(Regex(path))
-            }
+            cacheRegex()
         }
     }
 
     fun canIncludeClazz(className: String): Boolean {
-        if (!state.enabled) {
-            return false
+        if (paths.isEmpty()) {
+            return useBlacklist
         }
-        if (state.paths.isEmpty()) {
-            return state.useBlacklist
-        }
-        if (state.useRegex) {
+        if (useRegex) {
+            if (needsCaching) { // regex caching
+                cacheRegex()
+            }
             for (regex in cachedPathRegex) {
                 if (regex.containsMatchIn(className)) {
                     return !state.useBlacklist
                 }
             }
         } else {
-            for (path in state.paths) {
+            for (path in paths) {
                 if (className == path) {
-                    return !state.useBlacklist
+                    return !useBlacklist
                 }
             }
         }
-        return state.useBlacklist
+        return useBlacklist
+    }
+
+    private fun cacheRegex() {
+        needsCaching = false
+        cachedPathRegex = mutableListOf()
+        for (path in state.paths) {
+            println(path)
+            cachedPathRegex.add(Regex(path))
+        }
     }
 
     companion object {
