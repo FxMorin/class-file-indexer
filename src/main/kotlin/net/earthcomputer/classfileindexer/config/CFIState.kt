@@ -31,7 +31,9 @@ class CFIState : PersistentStateComponent<CFIState> {
     override fun loadState(state: CFIState) {
         XmlSerializerUtil.copyBean(state, this)
         if (state.useRegex) { // regex caching
-            cacheRegex()
+            synchronized(cachedPathRegex) {
+                cacheRegex()
+            }
         }
     }
 
@@ -40,12 +42,14 @@ class CFIState : PersistentStateComponent<CFIState> {
             return useBlacklist
         }
         if (useRegex) {
-            if (needsCaching) { // regex caching
-                cacheRegex()
-            }
-            for (regex in cachedPathRegex) {
-                if (regex.containsMatchIn(className)) {
-                    return !state.useBlacklist
+            synchronized(cachedPathRegex) {
+                if (needsCaching) { // regex caching
+                    cacheRegex()
+                }
+                for (regex in cachedPathRegex) {
+                    if (regex.containsMatchIn(className)) {
+                        return !state.useBlacklist
+                    }
                 }
             }
         } else {
