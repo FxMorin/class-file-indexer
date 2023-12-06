@@ -2,6 +2,14 @@
 
 # class-file-indexer Changelog
 
+## [1.2.2]
+### Added
+- Support for 2023.3
+### Changed
+- Removed old 2021.1 code
+- Updated Kotline to 1.9.0
+- Fixed synchronization issue
+
 ## [1.2.1]
 ### Changed
 - Fixed bugs
