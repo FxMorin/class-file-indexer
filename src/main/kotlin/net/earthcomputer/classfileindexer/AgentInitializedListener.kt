@@ -1,8 +1,9 @@
 package net.earthcomputer.classfileindexer
 
-import com.intellij.ide.ApplicationInitializedListener
 import com.intellij.ide.plugins.PluginManager
+import com.intellij.openapi.application.ApplicationActivationListener
 import com.intellij.openapi.extensions.PluginId
+import com.intellij.openapi.wm.IdeFrame
 import kotlinx.coroutines.repackaged.net.bytebuddy.agent.ByteBuddyAgent
 import java.io.File
 import java.io.InputStream
@@ -15,13 +16,12 @@ import java.util.jar.JarOutputStream
 import java.util.jar.Manifest
 import kotlin.io.path.isRegularFile
 
-@Suppress("UnstableApiUsage") // there's no other way
-class AgentInitializedListener : ApplicationInitializedListener {
+class AgentInitializedListener : ApplicationActivationListener {
     companion object {
         const val AGENT_CLASS_NAME = "net.earthcomputer.classfileindexer.MyAgent"
     }
 
-    override fun componentsInitialized() {
+    override fun applicationActivated(ideFrame: IdeFrame) {
         val jarFile = File.createTempFile("agent", ".jar")
         val jarPath = jarFile.toPath()
 
