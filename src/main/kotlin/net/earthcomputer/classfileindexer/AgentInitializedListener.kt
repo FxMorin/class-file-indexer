@@ -3,8 +3,7 @@ package net.earthcomputer.classfileindexer
 import com.intellij.ide.ApplicationInitializedListener
 import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.extensions.PluginId
-import com.intellij.util.io.isFile
-import net.bytebuddy.agent.ByteBuddyAgent
+import kotlinx.coroutines.repackaged.net.bytebuddy.agent.ByteBuddyAgent
 import java.io.File
 import java.io.InputStream
 import java.lang.management.ManagementFactory
@@ -14,6 +13,7 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.jar.Manifest
+import kotlin.io.path.isRegularFile
 
 @Suppress("UnstableApiUsage") // there's no other way
 class AgentInitializedListener : ApplicationInitializedListener {
@@ -144,14 +144,14 @@ class AgentInitializedListener : ApplicationInitializedListener {
         val relPath = prefix.replace(".", File.separator)
         var path = pluginPath.resolve(relPath)
         if (Files.exists(path)) {
-            Files.walk(path).filter { it.isFile() }.forEach { file ->
+            Files.walk(path).filter { it.isRegularFile() }.forEach { file ->
                 consumer(pluginPath.relativize(file).toString().replace(File.separator, "/"), Files.newInputStream(file))
             }
         }
         val basePath = pluginPath.resolve("classes")
         path = basePath.resolve(relPath)
         if (Files.exists(path)) {
-            Files.walk(path).filter { it.isFile() }.forEach { file ->
+            Files.walk(path).filter { it.isRegularFile() }.forEach { file ->
                 consumer(basePath.relativize(file).toString().replace(File.separator, "/"), Files.newInputStream(file))
             }
         }
