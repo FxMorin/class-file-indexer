@@ -9,6 +9,9 @@
     <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!--suppress PluginXmlValidity (internal API) -->
+        <applicationInitializedListener implementation="net.earthcomputer.classfileindexer.AgentInitializedListener"/>
+
         <applicationConfigurable
                 parentId="tools"
                 instance="net.earthcomputer.classfileindexer.config.CFISettings"
@@ -21,8 +24,4 @@
         <methodReferencesSearch implementation="net.earthcomputer.classfileindexer.MethodReferencesSearchExtension"/>
         <implicitToStringSearch implementation="net.earthcomputer.classfileindexer.ImplicitToStringSearchExtension"/>
     </extensions>
-
-    <applicationListeners>
-        <listener class="net.earthcomputer.classfileindexer.AgentInitializedListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
 </idea-plugin>
