@@ -16,8 +16,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath("org.ow2.asm:asm:9.3")
-        classpath("org.ow2.asm:asm-commons:9.3")
+        classpath("org.ow2.asm:asm:9.7")
+        classpath("org.ow2.asm:asm-commons:9.7")
         classpath("com.guardsquare:proguard-gradle:7.2.2")
     }
 }
@@ -126,7 +126,7 @@ dependencies {
         to.attribute(repackagedAttribute, true).attribute(artifactTypeAttribute, "jar")
     }
 
-    repackage("org.ow2.asm:asm:9.3")
+    repackage("org.ow2.asm:asm:9.7")
     implementation(files(repackage.files))
 }
 
