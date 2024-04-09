@@ -2,6 +2,10 @@
 
 # class-file-indexer Changelog
 
+## [1.2.6]
+### Changed
+- Use library path instead of library name
+
 ## [1.2.5]
 ### Added
 - New blacklist & regex options for library names
