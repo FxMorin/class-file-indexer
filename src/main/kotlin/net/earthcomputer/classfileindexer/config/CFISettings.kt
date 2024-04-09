@@ -52,13 +52,14 @@ class CFISettings : SearchableConfigurable {
         state.paths.clear()
         state.paths.addAll(newList)
 
+        val newLibraryList: MutableList<String> = mutableListOf()
         val listLibraryModel = panel.namesList.model
         for (i in 0 until listLibraryModel.size) {
             val textField = listLibraryModel.getElementAt(i)
-            newList.add(textField.text)
+            newLibraryList.add(textField.text)
         }
         state.libraries.clear()
-        state.libraries.addAll(newList)
+        state.libraries.addAll(newLibraryList)
 
         panel.arePathsModified = false
         panel.areLibrariesModified = false
