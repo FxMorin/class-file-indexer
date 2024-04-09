@@ -16,7 +16,7 @@ class CFISettings : SearchableConfigurable {
 
     override fun isModified(): Boolean {
         val panel = this.panel ?: return false
-        if (panel.arePathsModified) {
+        if (panel.arePathsModified || panel.areLibrariesModified) {
             return true
         }
         val state = CFIState.getInstance()
@@ -32,7 +32,8 @@ class CFISettings : SearchableConfigurable {
         panel.useBlacklistCheckbox.isSelected = state.useBlacklist
         panel.useRegexCheckbox.isSelected = state.useRegex
 
-        panel.refreshList()
+        panel.refreshPathList()
+        panel.refreshLibrariesList()
     }
 
     override fun apply() {
@@ -51,7 +52,16 @@ class CFISettings : SearchableConfigurable {
         state.paths.clear()
         state.paths.addAll(newList)
 
+        val listLibraryModel = panel.namesList.model
+        for (i in 0 until listLibraryModel.size) {
+            val textField = listLibraryModel.getElementAt(i)
+            newList.add(textField.text)
+        }
+        state.libraries.clear()
+        state.libraries.addAll(newList)
+
         panel.arePathsModified = false
+        panel.areLibrariesModified = false
         // Require restart for changes to take effect  // TODO: Make it not require a restart xD
         (ApplicationManager.getApplication() as ApplicationEx).restart(true)
     }

@@ -13,47 +13,69 @@ import javax.swing.*
 class CFISettingsPanel {
 
     var arePathsModified: Boolean = false
+    var areLibrariesModified: Boolean = false
 
     lateinit var mainPanel: JPanel
     lateinit var pluginSettingsPanel: JPanel
     lateinit var enableClassFileIndexerCheckbox: JBCheckBox
     lateinit var useBlacklistCheckbox: JBCheckBox
     lateinit var useRegexCheckbox: JBCheckBox
+
     lateinit var addPathPanel: JPanel
     lateinit var pathTextField: JTextField
     lateinit var addPathButton: JButton
     lateinit var pathsScrollPane: JScrollPane
     lateinit var pathsPanel: JPanel
     lateinit var pathsList: JList<JTextField>
-    lateinit var buttonList: JList<JButton>
+    lateinit var pathButtonList: JList<JButton>
+
+    lateinit var addLibraryNamePanel: JPanel
+    lateinit var nameTextField: JTextField
+    lateinit var addNameButton: JButton
+    lateinit var namesScrollPane: JScrollPane
+    lateinit var namesPanel: JPanel
+    lateinit var namesList: JList<JTextField>
+    lateinit var nameButtonList: JList<JButton>
 
     init {
         pluginSettingsPanel.border = IdeBorderFactory.createTitledBorder("Plugin Settings")
         addPathPanel.border = IdeBorderFactory.createTitledBorder("Add Path")
         pathsScrollPane.border = IdeBorderFactory.createTitledBorder("Paths")
+        addLibraryNamePanel.border = IdeBorderFactory.createTitledBorder("Add Library Names")
+        namesScrollPane.border = IdeBorderFactory.createTitledBorder("Library Names")
+
+
+
         val gridBagLayout = GridBagLayout()
-        val pathConstraints = GridBagConstraints()
-        pathConstraints.weightx = 0.7
-        pathConstraints.fill = GridBagConstraints.HORIZONTAL
-        pathConstraints.anchor = GridBagConstraints.NORTH
-        pathConstraints.weighty = 1.0
-        val buttonConstraints = GridBagConstraints()
-        buttonConstraints.weighty = 1.0
-        buttonConstraints.anchor = GridBagConstraints.NORTH
-        buttonConstraints.fill = GridBagConstraints.NONE
-        gridBagLayout.setConstraints(pathsList, pathConstraints)
-        gridBagLayout.setConstraints(buttonList, buttonConstraints)
+        val gridBagLayout2 = GridBagLayout()
+        gridBagLayout.setConstraints(pathsList, createListItemConstraints())
+        gridBagLayout.setConstraints(pathButtonList, createButtonConstraints())
         pathsPanel.layout = gridBagLayout
+        gridBagLayout2.setConstraints(namesList, createListItemConstraints())
+        gridBagLayout2.setConstraints(nameButtonList, createButtonConstraints())
+        namesPanel.layout = gridBagLayout2
 
         pathsList.cellRenderer = TextFieldListRenderer()
-        buttonList.cellRenderer = ButtonListRenderer()
+        pathButtonList.cellRenderer = ButtonListRenderer()
 
-        buttonList.addMouseListener(object : MouseAdapter() {
+        namesList.cellRenderer = TextFieldListRenderer()
+        nameButtonList.cellRenderer = ButtonListRenderer()
+
+        pathButtonList.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(event: MouseEvent) {
-                val index: Int = buttonList.locationToIndex(event.getPoint())
+                val index: Int = pathButtonList.locationToIndex(event.getPoint())
                 CFIState.getInstance().paths.removeAt(index)
                 arePathsModified = true
-                refreshList()
+                refreshPathList()
+            }
+        })
+
+        nameButtonList.addMouseListener(object : MouseAdapter() {
+            override fun mouseClicked(event: MouseEvent) {
+                val index: Int = nameButtonList.locationToIndex(event.getPoint())
+                CFIState.getInstance().libraries.removeAt(index)
+                areLibrariesModified = true
+                refreshLibrariesList()
             }
         })
 
@@ -61,13 +83,21 @@ class CFISettingsPanel {
             CFIState.getInstance().paths.add(pathTextField.text)
             arePathsModified = true
             pathTextField.text = ""
-            refreshList()
+            refreshPathList()
         }
 
-        refreshList()
+        addNameButton.addActionListener {
+            CFIState.getInstance().libraries.add(nameTextField.text)
+            areLibrariesModified = true
+            nameTextField.text = ""
+            refreshLibrariesList()
+        }
+
+        refreshPathList()
+        refreshLibrariesList()
     }
 
-    fun refreshList() {
+    fun refreshPathList() {
         val pathModel: DefaultListModel<JTextField> = DefaultListModel<JTextField>()
         val buttonModel: DefaultListModel<JButton> = DefaultListModel<JButton>()
 
@@ -81,15 +111,66 @@ class CFISettingsPanel {
         }
 
         pathsList.model = pathModel
-        buttonList.model = buttonModel
+        pathButtonList.model = buttonModel
 
         val totalCount = CFIState.getInstance().paths.count()
         pathsList.visibleRowCount = totalCount
-        buttonList.visibleRowCount = totalCount
+        pathButtonList.visibleRowCount = totalCount
 
-        addPathPanel.repaint()
         pathsPanel.revalidate()
+        pathsScrollPane.revalidate()
+
         pathsPanel.repaint()
+        pathsScrollPane.repaint()
+        addPathPanel.repaint()
+    }
+
+    fun refreshLibrariesList() {
+        val nameModel: DefaultListModel<JTextField> = DefaultListModel<JTextField>()
+        val buttonModel: DefaultListModel<JButton> = DefaultListModel<JButton>()
+
+        for (library in CFIState.getInstance().libraries) {
+            val textField = JTextField(library, 50)
+            textField.isEditable = false
+            textField.isFocusable = false
+            textField.horizontalAlignment = JTextField.LEFT
+            nameModel.addElement(textField)
+            buttonModel.addElement(JButton("Remove"))
+        }
+
+        namesList.model = nameModel
+        nameButtonList.model = buttonModel
+
+        val totalCount = CFIState.getInstance().libraries.count()
+        namesList.visibleRowCount = totalCount
+        nameButtonList.visibleRowCount = totalCount
+
+        namesPanel.revalidate()
+
+        namesScrollPane.setViewportView(namesPanel)
+
+        namesScrollPane.revalidate()
+
+        namesPanel.repaint()
+        namesScrollPane.repaint()
+        addLibraryNamePanel.repaint()
+    }
+
+    private fun createListItemConstraints() : GridBagConstraints {
+        val constraints = GridBagConstraints()
+        constraints.weightx = 0.7
+        constraints.fill = GridBagConstraints.BOTH
+        constraints.anchor = GridBagConstraints.NORTH
+        constraints.weighty = 1.0
+        return constraints
+    }
+
+    private fun createButtonConstraints() : GridBagConstraints {
+        val constraints = GridBagConstraints()
+        constraints.weighty = 1.0
+        constraints.anchor = GridBagConstraints.NORTH
+        constraints.fill = GridBagConstraints.NONE
+        return constraints
     }
 
     internal class TextFieldListRenderer : JTextField(), ListCellRenderer<JTextField> {

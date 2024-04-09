@@ -70,12 +70,25 @@ class ClassFileIndexExtension :
     override fun getVersion() = 4
 
     override fun getInputFilter() = object : DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE) {
+
+        val libraryPathCache : HashMap<String, Boolean> = HashMap()
+
         override fun acceptInput(file: VirtualFile): Boolean {
             if (!CFIState.getInstance().enabled) {
                 return false
             }
+
             val index = file.path.lastIndexOf("!") // Find within Jar
             if (index == -1) {
+                return CFIState.getInstance().useBlacklist
+            }
+
+            val libraryPath = file.path.substring(0, index)
+            if (!libraryPathCache.computeIfAbsent(libraryPath) { path ->
+                val slashIndex = path.lastIndexOf("/")
+                val libraryName = path.substring(0, slashIndex + 1)
+                CFIState.getInstance().canIncludeLibrary(libraryName)
+            }) {
                 return CFIState.getInstance().useBlacklist
             }
 
