@@ -2,6 +2,12 @@
 
 # class-file-indexer Changelog
 
+## [1.2.4]
+### Added
+- Library class filtering
+### Changed
+- Fix bug in 1.2.3
+
 ## [1.2.3]
 ### Added
 - Support for 2024.1
