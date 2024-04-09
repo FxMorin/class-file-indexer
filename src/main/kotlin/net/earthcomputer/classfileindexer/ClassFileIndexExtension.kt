@@ -89,7 +89,7 @@ class ClassFileIndexExtension :
                 val libraryName = path.substring(0, slashIndex + 1)
                 CFIState.getInstance().canIncludeLibrary(libraryName)
             }) {
-                return CFIState.getInstance().useBlacklist
+                return CFIState.getInstance().useBlacklistLibrary
             }
 
             val classPath = file.path.substring(index + 2).removeSuffix("." + file.extension)

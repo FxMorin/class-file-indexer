@@ -20,6 +20,11 @@ class CFIState : PersistentStateComponent<CFIState> {
     var useRegex: Boolean = true
     @JvmField
     var paths: MutableList<String> = mutableListOf("^net/minecraft/.*", "^com/mojang/.*")
+
+    @JvmField
+    var useBlacklistLibrary: Boolean = false
+    @JvmField
+    var useRegexLibrary: Boolean = true
     @JvmField
     var libraries: MutableList<String> = mutableListOf()
 
@@ -30,7 +35,7 @@ class CFIState : PersistentStateComponent<CFIState> {
     @Transient
     private var needsPathCaching: Boolean = useRegex
     @Transient
-    private var needsLibraryCaching: Boolean = useRegex
+    private var needsLibraryCaching: Boolean = useRegexLibrary
 
     override fun getState(): CFIState = this
 
@@ -40,6 +45,8 @@ class CFIState : PersistentStateComponent<CFIState> {
             synchronized(cachedPathRegex) {
                 cachePathRegex()
             }
+        }
+        if (state.useRegexLibrary) {
             synchronized(cachedLibraryRegex) {
                 cacheLibraryRegex()
             }
@@ -48,27 +55,27 @@ class CFIState : PersistentStateComponent<CFIState> {
 
     fun canIncludeLibrary(libraryName: String): Boolean {
         if (libraries.isEmpty()) {
-            return useBlacklist
+            return useBlacklistLibrary
         }
-        if (useRegex) {
+        if (useRegexLibrary) {
             synchronized(cachedLibraryRegex) {
                 if (needsLibraryCaching) { // regex caching
                     cacheLibraryRegex()
                 }
                 for (regex in cachedLibraryRegex) {
                     if (regex.containsMatchIn(libraryName)) {
-                        return !state.useBlacklist
+                        return !useBlacklistLibrary
                     }
                 }
             }
         } else {
             for (library in libraries) {
                 if (libraryName == library) {
-                    return !useBlacklist
+                    return !useBlacklistLibrary
                 }
             }
         }
-        return useBlacklist
+        return useBlacklistLibrary
     }
 
     fun canIncludeClazz(className: String): Boolean {
@@ -82,7 +89,7 @@ class CFIState : PersistentStateComponent<CFIState> {
                 }
                 for (regex in cachedPathRegex) {
                     if (regex.containsMatchIn(className)) {
-                        return !state.useBlacklist
+                        return !useBlacklist
                     }
                 }
             }
@@ -99,7 +106,7 @@ class CFIState : PersistentStateComponent<CFIState> {
     private fun cacheLibraryRegex() {
         needsLibraryCaching = false
         cachedLibraryRegex = mutableListOf()
-        for (path in state.libraries) {
+        for (path in libraries) {
             cachedLibraryRegex.add(Regex(path))
         }
     }
@@ -107,7 +114,7 @@ class CFIState : PersistentStateComponent<CFIState> {
     private fun cachePathRegex() {
         needsPathCaching = false
         cachedPathRegex = mutableListOf()
-        for (path in state.paths) {
+        for (path in paths) {
             cachedPathRegex.add(Regex(path))
         }
     }

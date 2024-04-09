@@ -18,6 +18,7 @@ class CFISettingsPanel {
     lateinit var mainPanel: JPanel
     lateinit var pluginSettingsPanel: JPanel
     lateinit var enableClassFileIndexerCheckbox: JBCheckBox
+
     lateinit var useBlacklistCheckbox: JBCheckBox
     lateinit var useRegexCheckbox: JBCheckBox
 
@@ -28,6 +29,9 @@ class CFISettingsPanel {
     lateinit var pathsPanel: JPanel
     lateinit var pathsList: JList<JTextField>
     lateinit var pathButtonList: JList<JButton>
+
+    lateinit var useBlacklistLibraryCheckbox: JBCheckBox
+    lateinit var useRegexLibraryCheckbox: JBCheckBox
 
     lateinit var addLibraryNamePanel: JPanel
     lateinit var nameTextField: JTextField

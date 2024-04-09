@@ -23,6 +23,8 @@ class CFISettings : SearchableConfigurable {
         return panel.enableClassFileIndexerCheckbox.isSelected != state.enabled
                 || panel.useBlacklistCheckbox.isSelected != state.useBlacklist
                 || panel.useRegexCheckbox.isSelected != state.useRegex
+                || panel.useBlacklistLibraryCheckbox.isSelected != state.useBlacklistLibrary
+                || panel.useRegexLibraryCheckbox.isSelected != state.useRegexLibrary
     }
 
     override fun reset() {
@@ -31,6 +33,8 @@ class CFISettings : SearchableConfigurable {
         panel.enableClassFileIndexerCheckbox.isSelected = state.enabled
         panel.useBlacklistCheckbox.isSelected = state.useBlacklist
         panel.useRegexCheckbox.isSelected = state.useRegex
+        panel.useBlacklistLibraryCheckbox.isSelected = state.useBlacklistLibrary
+        panel.useRegexLibraryCheckbox.isSelected = state.useRegexLibrary
 
         panel.refreshPathList()
         panel.refreshLibrariesList()
@@ -42,6 +46,8 @@ class CFISettings : SearchableConfigurable {
         state.enabled = panel.enableClassFileIndexerCheckbox.isSelected
         state.useBlacklist = panel.useBlacklistCheckbox.isSelected
         state.useRegex = panel.useRegexCheckbox.isSelected
+        state.useBlacklistLibrary = panel.useBlacklistLibraryCheckbox.isSelected
+        state.useRegexLibrary = panel.useRegexLibraryCheckbox.isSelected
 
         val newList: MutableList<String> = mutableListOf()
         val listModel = panel.pathsList.model
