@@ -85,9 +85,7 @@ class ClassFileIndexExtension :
 
             val libraryPath = file.path.substring(0, index)
             if (!libraryPathCache.computeIfAbsent(libraryPath) { path ->
-                val slashIndex = path.lastIndexOf("/")
-                val libraryName = path.substring(0, slashIndex + 1)
-                CFIState.getInstance().canIncludeLibrary(libraryName)
+                CFIState.getInstance().canIncludeLibrary(path)
             }) {
                 return CFIState.getInstance().useBlacklistLibrary
             }

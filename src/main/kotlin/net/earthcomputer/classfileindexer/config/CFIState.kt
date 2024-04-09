@@ -53,7 +53,7 @@ class CFIState : PersistentStateComponent<CFIState> {
         }
     }
 
-    fun canIncludeLibrary(libraryName: String): Boolean {
+    fun canIncludeLibrary(libraryPath: String): Boolean {
         if (libraries.isEmpty()) {
             return useBlacklistLibrary
         }
@@ -63,14 +63,14 @@ class CFIState : PersistentStateComponent<CFIState> {
                     cacheLibraryRegex()
                 }
                 for (regex in cachedLibraryRegex) {
-                    if (regex.containsMatchIn(libraryName)) {
+                    if (regex.containsMatchIn(libraryPath)) {
                         return !useBlacklistLibrary
                     }
                 }
             }
         } else {
             for (library in libraries) {
-                if (libraryName == library) {
+                if (libraryPath == library) {
                     return !useBlacklistLibrary
                 }
             }

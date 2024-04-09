@@ -45,8 +45,8 @@ class CFISettingsPanel {
         pluginSettingsPanel.border = IdeBorderFactory.createTitledBorder("Plugin Settings")
         addPathPanel.border = IdeBorderFactory.createTitledBorder("Add Path")
         pathsScrollPane.border = IdeBorderFactory.createTitledBorder("Paths")
-        addLibraryNamePanel.border = IdeBorderFactory.createTitledBorder("Add Library Names")
-        namesScrollPane.border = IdeBorderFactory.createTitledBorder("Library Names")
+        addLibraryNamePanel.border = IdeBorderFactory.createTitledBorder("Add Library Path")
+        namesScrollPane.border = IdeBorderFactory.createTitledBorder("Library Paths")
 
 
 
